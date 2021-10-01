@@ -46,7 +46,7 @@ dl_bilibili_shell() {
     if [ ! -a "$bilibili_shell_path" ]; then
         touch $bilibili_shell_path
     fi
-    curl -sL --connect-timeout 3 $valid_url > $bilibili_shell_path
+    curl -sL --connect-timeout 3 $valid_url > $bili_shell_path
     cp $bilibili_shell_path $dir_config/bilibili.json
     # 判断是否下载成功
     bilibili_size=$(ls -l $bilibili_shell_path | awk '{print $5}')
