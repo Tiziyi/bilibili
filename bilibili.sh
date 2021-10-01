@@ -1,7 +1,33 @@
 #!/usr/bin/env bash
+
+
 dir_config=/ql/config
 dir_script=/ql/scripts
 dir_bilibili=$dir_config/bilibili.json
+
+
+# 控制是否执行变量
+read -p "是否执行全部操作，输入 1 即可执行全部，输入 0 则跳出，回车默认和其他可进行选择性操作，建议初次配置输入 1：" all
+if [ "${all}" = 1 ]; then
+    echo "将执行全部操作"
+elif [ "${all}" = 0 ]; then
+    exit 0
+else
+    read -p "bilibili.json 操作（替换或下载选项为 y，不替换为 n，回车为替换）请输入：" Rconfig
+    Rconfig=${Rconfig:-'y'}
+    read -p "bili_update.sh 操作（替换或下载选项为 a，修改设置区设置为 b，添加到定时任务为 c，立即执行一次为 d，全部不执行为 n，回车全部执行 | 示例：acd）请输入：" extra
+    extra=${extra:-'abcd'}
+fi
+
+# 检查域名连通性
+check_url() {
+    HTTP_CODE=$(curl -o /dev/null --connect-timeout 3 -s -w "%{http_code}" $1)
+    if [ $HTTP_CODE -eq 200 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 # 获取有效 config.sh 链接
 get_valid_config() {
@@ -29,3 +55,10 @@ dl_bilibili_shell() {
         exit 0
     fi
 }
+if [ "${Rconfig}" = 'y' -o "${all}" = 1 ]; then
+    get_valid_config && dl_config_shell
+else
+    echo "已为您跳过替换 bilibili.json"
+fi
+
+
