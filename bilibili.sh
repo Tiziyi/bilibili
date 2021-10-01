@@ -4,8 +4,7 @@
 dir_config=/ql/config
 dir_script=/ql/scripts
 bilibili_shell_path=$dir_config/bilibili.json
-bili_shell_path=$dir_script/bili.sh
-dir_y=1
+bili_shell_path=$dir_script/bili_update.sh
 
 # 控制是否执行变量
 read -p "是否执行全部操作，输入 1 即可执行全部，输入 0 则跳出，回车默认和其他可进行选择性操作，建议初次配置输入 1：" all
@@ -18,6 +17,8 @@ else
     Rconfig=${Rconfig:-'y'}
     read -p "bili_update.sh 操作（替换或下载选项为 y，不替换为 n，回车为替换）请输入：" update
     update=${update:-'y'}
+    read -p "是否自动添加定时任务（添加或替换选项为 y，不替换为 n，回车为替换）请输入：" suqing
+    suqing=${suqing:-'y'}
 fi
 
 # 检查域名连通性
@@ -31,7 +32,7 @@ check_url() {
 }
 
 # 获取有效 bilibili.json 链接
-get_valid_bilibili() {
+get_json_bilibili() {
     bilibili_list=(https://ghproxy.com/https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json https://raw.sevencdn.com/Tiziyi/bilibili/main/bilibili.jsonhttps://ghproxy.com/https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json)
     for url in ${bilibili_list[@]}; do
         check_url $url
@@ -57,11 +58,8 @@ dl_bilibili_shell() {
     fi
 }
 if [ "${Rconfig}" = 'y' -o "${all}" = 1 ]; then
-    get_valid_bilibili && dl_bilibili_shell
+    get_json_bilibili && dl_bilibili_shell
 else
-
-
-
     echo "已为您跳过替换 bilibili.json"
 fi
 
@@ -82,8 +80,11 @@ rm -rf blbl
 rm -rf BILIBILI-HELPER.zip
 echo "下载完成"
 ##安装依赖
-echo "安装依赖"
-cd /ql && apk add openjdk8
+if ! [ -x "$(command -v java)" ]; then
+   echo "开始安装Java运行环境........."
+   apk update
+   apk add openjdk8
+fi
 sleep 5
 echo "依赖安装完成"
 
@@ -105,11 +106,71 @@ run_bilibili_java() {
     sleep 5
 }
 
-if [ "${dir_r}" = 1 ]; then
+if [ "${suqing}" = 'y' -o "${all}" = 1 ]; then
     add_bilibili_jay && run_bilibili_java
-else
     echo "已为您添加定时任务"
+else
+    echo "已为您跳过添加定时任务"
 fi
+
+
+# 获取有效 更新文件 链接
+get_sh_bilibili() {
+    bili_list=(https://ghproxy.com/https://raw.githubusercontent.com/JunzhouLiu/BILIBILI-HELPER-PRE/main/bilibili_helper.sh https://raw.githubusercontent.com/JunzhouLiu/BILIBILI-HELPER-PRE/main/bilibili_helper.sh https://raw.sevencdn.com/JunzhouLiu/BILIBILI-HELPER-PRE/main/bilibili_helper.sh)
+    for url in ${bili_list[@]}; do
+        check_url $url
+        if [ $? = 0 ]; then
+            valid_url=$url
+            echo "使用链接 $url"
+            break
+        fi
+    done
+}
+
+# 下载自动更新配置文件
+dl_bili_shell() {
+    if [ ! -a "$bili_shell_path" ]; then
+        touch $bili_shell_path
+    fi
+    curl -sL --connect-timeout 3 $valid_url > $bili_shell_path
+    cp $bili_shell_path $dir_script/bili_update.sh
+    # 判断是否下载成功
+    bili_size=$(ls -l $bili_shell_path | awk '{print $5}')
+    if (( $(echo "${bili_size} < 100" | bc -l) )); then
+        echo "bili_update.sh 下载失败"
+        exit 0
+    fi
+}
+
+if [ "${bili_update.sh}" = 'y' -o "${all}" = 1 ]; then
+    get_sh_bilibili && dl_bili_shell
+else
+
+# 将 自动更新 添加到定时任务
+echo "尝试添加定时任务"
+add_bili_update() {
+    if [ "$(grep -c "bili_date" /ql/config/crontab.list)" != 0 ]; then
+        echo "您的任务列表中已存在 bili_date"
+    else
+        echo "开始添加 bili_date定时任务"
+        # 获取token
+        token=$(cat /ql/config/auth.json | jq --raw-output .token)
+        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"更新海尔破","command":"task bili_update.sh","schedule":"15 4 * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1624782068473'
+    fi
+}
+# 运行一次 bili_date
+run_bili_update() {
+    task bili_update.sh
+    sleep 5
+}
+
+if [ "${suqing}" = 'y' -o "${all}" = 1 ]; then
+    dl_bili_shell && run_bili_update
+    echo "已为您添加定时任务"
+else
+    echo "已为您跳过添加定时任务"
+fi
+
 
 # 提示配置结束
 echo -e "\n配置到此结束，请前往/ql/config/bilibili.json填入配置"
