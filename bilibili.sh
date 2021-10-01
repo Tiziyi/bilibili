@@ -15,8 +15,8 @@ elif [ "${all}" = 0 ]; then
 else
     read -p "bilibili.json 操作（替换或下载选项为 y，不替换为 n，回车为替换）请输入：" Rconfig
     Rconfig=${Rconfig:-'y'}
-    read -p "bili_update.sh 操作（替换或下载选项为 a，修改设置区设置为 b，添加到定时任务为 c，立即执行一次为 d，全部不执行为 n，回车全部执行 | 示例：acd）请输入：" extra
-    extra=${extra:-'abcd'}
+    read -p "bili_update.sh 操作（替换或下载选项为 y，不替换为 n，回车为替换）请输入：" update
+    update=${update:-'y'}
 fi
 
 # 检查域名连通性
