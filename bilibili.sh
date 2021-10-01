@@ -64,6 +64,28 @@ else
     echo "已为您跳过替换 bilibili.json"
 fi
 
+##下载jay文件
+curl -L -o "./BILIBILI-HELPER.zip" "https://ghproxy.com/$download_url"
+   mkdir ./tmp
+   echo "正在解压文件......."
+   unzip -d ./tmp/ BILIBILI-HELPER.zip
+   cp -f ./tmp/BILIBILI-HELPER*.jar BILIBILI-HELPER.jar
+   echo "清除缓存........."
+   rm -rf tmp
+   rm -rf BILIBILI-HELPER.zip
+   echo "下载文件完成"
+  
+##安装依赖
+install_dependencies_all(){
+    install_dependencies_normal openjdk
+    for i in openjdk; do
+        install_dependencies_force $i
+    done
+}
+
+
+
+
 
 # 提示配置结束
 echo -e "\n配置到此结束，您是否成功了呢？"
