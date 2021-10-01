@@ -66,23 +66,44 @@ fi
 
 ##下载jay包
 cd /ql/scripts
+latest=$(curl -s https://api.github.com/repos/JunzhouLiu/BILIBILI-HELPER-PRE/releases/latest)
+latest_VERSION=`echo $latest | jq '.tag_name' | sed 's/v\|"//g'`
+download_url=`echo $latest | jq '.assets[0].browser_download_url' | sed 's/"//g'`
+echo "最新版本:"$latest_VERSION
 echo"下载jay文件......"
 curl -L -o "./BILIBILI-HELPER.zip" "https://ghproxy.com/$download_url"
-mkdir ./tmp
+mkdir ./blbl
 echo "正在解压文件......."
-unzip -d ./tmp/ BILIBILI-HELPER.zip
-cp -f ./tmp/BILIBILI-HELPER*.jar BILIBILI-HELPER.jar
+unzip -d ./blbl/ BILIBILI-HELPER.zip
+cp -f ./blbl/BILIBILI-HELPER*.jar /ql/scripts/BILIBILI-HELPER.jar
 echo "清除缓存........."
-rm -rf tmp
+rm -rf blbl
 rm -rf BILIBILI-HELPER.zip
 echo "下载完成"
 ##安装依赖
 echo "安装依赖"
 cd /ql && apk add openjdk8
 sleep 5
-echo "安装完成"
+echo "依赖安装完成"
 
-
+# 将 bilibilijay包 添加到定时任务
+add_bilibili_jay()
+if [ "$(grep -c "BILIBILI-HELPER" /ql/config/crontab.list)" != 0 ]; then
+        echo "您的任务列表中已存在 java -jar /ql/scripts/BILIBILI-HELPER.jar"
+    else
+        echo "开始添加 java -jar /ql/scripts/BILIBILI-HELPER.jar"
+        # 获取token
+        token=$(cat /ql/config/auth.json | jq --raw-output .token)
+        num=$[RANDOM%60+1]
+        nun=$[RANDOM%24+1]
+        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"运行海尔破","command":"java -jar /ql/scripts/BILIBILI-HELPER.jar /ql/config/bilibili.json","schedule":"$num $nun * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1624782068473'
+    fi
+}
+# 运行一次 java -jar /ql/scripts/BILIBILI-HELPER.jar
+run_bilibili_java() {
+    java -jar /ql/scripts/BILIBILI-HELPER.jar /ql/config/bilibili.json
+    sleep 5
+}
 
 
 
