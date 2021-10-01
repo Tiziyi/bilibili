@@ -87,6 +87,7 @@ sleep 5
 echo "依赖安装完成"
 
 # 将 bilibilijay包 添加到定时任务
+echo "尝试添加定时任务"
 add_bilibili_jay()
 if [ "$(grep -c "BILIBILI-HELPER" /ql/config/crontab.list)" != 0 ]; then
         echo "您的任务列表中已存在 java -jar /ql/scripts/BILIBILI-HELPER.jar"
@@ -94,9 +95,7 @@ if [ "$(grep -c "BILIBILI-HELPER" /ql/config/crontab.list)" != 0 ]; then
         echo "开始添加 java -jar /ql/scripts/BILIBILI-HELPER.jar"
         # 获取token
         token=$(cat /ql/config/auth.json | jq --raw-output .token)
-        num=$[RANDOM%60+1]
-        nun=$[RANDOM%24+1]
-        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"运行海尔破","command":"java -jar /ql/scripts/BILIBILI-HELPER.jar /ql/config/bilibili.json","schedule":"$num $nun * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1624782068473'
+        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"运行海尔破","command":"java -jar /ql/scripts/BILIBILI-HELPER.jar /ql/config/bilibili.json","schedule":"51 0 * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1624782068473'
     fi
 }
 # 运行一次 java -jar /ql/scripts/BILIBILI-HELPER.jar
@@ -105,7 +104,16 @@ run_bilibili_java() {
     sleep 5
 }
 
-
+if [ "${Rconfig}" = 'y' -o "${all}" = 1 ]; then
+    add_bilibili_jay && run_bilibili_java
+else
+    echo "已为您添加定时任务"
+fi
+if [ "${Rconfig}" = 'n' -o "${all}" = 0 ]; then
+    add_bilibili_jay && run_bilibili_java
+else
+    echo "已为您添加定时任务"
+fi
 
 # 提示配置结束
 echo -e "\n配置到此结束，请前往/ql/config/bilibili.json填入配置"
