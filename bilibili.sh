@@ -29,7 +29,7 @@ check_url() {
     fi
 }
 
-# 获取有效 config.sh 链接
+# 获取有效 bilibili.json 链接
 get_valid_bilibili() {
     bilibili_list=(https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json https://raw.sevencdn.com/Tiziyi/bilibili/main/bilibili.json https://ghproxy.com/https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json)
     for url in ${bilibili_list[@]}; do
@@ -64,24 +64,9 @@ else
     echo "已为您跳过替换 bilibili.json"
 fi
 
-##下载jay文件
-curl -L -o "./BILIBILI-HELPER.zip" "https://ghproxy.com/$download_url"
-   mkdir ./tmp
-   echo "正在解压文件......."
-   unzip -d ./tmp/ BILIBILI-HELPER.zip
-   cp -f ./tmp/BILIBILI-HELPER*.jar BILIBILI-HELPER.jar
-   echo "清除缓存........."
-   rm -rf tmp
-   rm -rf BILIBILI-HELPER.zip
-   echo "下载文件完成"
-  
-##安装依赖
-install_dependencies_all(){
-    install_dependencies_normal openjdk
-    for i in openjdk; do
-        install_dependencies_force $i
-    done
-}
+
+
+
 
 
 
