@@ -5,6 +5,7 @@ dir_config=/ql/config
 dir_script=/ql/scripts
 bilibili_shell_path=$dir_config/bilibili.json
 bili_shell_path=$dir_script/bili.sh
+dir_y=1
 
 # 控制是否执行变量
 read -p "是否执行全部操作，输入 1 即可执行全部，输入 0 则跳出，回车默认和其他可进行选择性操作，建议初次配置输入 1：" all
@@ -104,12 +105,7 @@ run_bilibili_java() {
     sleep 5
 }
 
-if [ "${Rconfig}" = 'y' -o "${all}" = 1 ]; then
-    add_bilibili_jay && run_bilibili_java
-else
-    echo "已为您添加定时任务"
-fi
-if [ "${Rconfig}" = 'n' -o "${all}" = 0 ]; then
+if [ "${dir_r}" = 1 ]; then
     add_bilibili_jay && run_bilibili_java
 else
     echo "已为您添加定时任务"
