@@ -30,7 +30,7 @@ check_url() {
 }
 
 # 获取有效 config.sh 链接
-get_valid_config() {
+get_valid_bilibili() {
     config_list=(https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json)
     for url in ${config_list[@]}; do
         check_url $url
@@ -56,7 +56,7 @@ dl_bilibili_shell() {
     fi
 }
 if [ "${Rconfig}" = 'y' -o "${all}" = 1 ]; then
-    get_valid_config && dl_config_shell
+    get_valid_bilibili && dl_bilibili_shell
 else
     echo "已为您跳过替换 bilibili.json"
 fi
