@@ -145,7 +145,7 @@ dl_bili_shell() {
 if [ "${update}" = 'y' -o "${all}" = 1 ]; then
     get_sh_bili && dl_bili_shell
 else
-    echo "已为您跳过替换 task_before.sh"
+    echo "已为您跳过替换 bili_update.sh"
 fi
 
 
