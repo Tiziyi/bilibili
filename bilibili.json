@@ -1,0 +1,44 @@
+{
+  "biliVerify": {
+    "biliCookies": "你的bilibili cookies"
+  },
+  "taskConfig": {
+    "skipDailyTask": false,
+    "matchGame": false,
+    "showHandModel": false,
+    "predictNumberOfCoins": 1,
+    "minimumNumberOfCoins": 100,
+    "taskIntervalTime": 20,
+    "numberOfCoins": 5,
+    "coinAddPriority": 1,
+    "reserveCoins": 10,
+    "selectLike": 0,
+    "monthEndAutoCharge": true,
+    "giveGift": true,
+    "silver2Coin": true,
+    "upLive": "0",
+    "chargeForLove": "14602398",
+    "chargeDay": 25,
+    "devicePlatform": "ios",
+    "userAgent": "你的浏览器UA"
+  },
+  "pushConfig": {
+    "SC_KEY": "",
+    "SCT_KEY": "",
+    "TG_BOT_TOKEN": "",
+    "TG_USER_ID": "",
+    "TG_USE_CUSTOM_URL": false,
+    "DING_TALK_URL": "",
+    "DING_TALK_SECRET": "",
+    "PUSH_PLUS_TOKEN": "",
+    "WE_COM_GROUP_TOKEN": "",
+    "WE_COM_APP_CORPID": "",
+    "WE_COM_APP_CORP_SECRET": "",
+    "WE_COM_APP_AGENT_ID": 0,
+    "WE_COM_APP_TO_USER": "",
+    "WE_COM_APP_MEDIA_ID": "",
+    "PROXY_HTTP_HOST": "",
+    "PROXY_SOCKET_HOST": "",
+    "PROXY_PORT": 0
+  }
+}
