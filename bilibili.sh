@@ -113,10 +113,10 @@ else
     echo "已为您跳过添加定时任务"
 fi
 
-
+#############################################
 # 获取有效 更新文件 链接
-get_sh_bilibili() {
-    bili_list=(https://ghproxy.com/https://raw.githubusercontent.com/JunzhouLiu/BILIBILI-HELPER-PRE/main/bilibili_helper.sh https://raw.githubusercontent.com/JunzhouLiu/BILIBILI-HELPER-PRE/main/bilibili_helper.sh https://raw.sevencdn.com/JunzhouLiu/BILIBILI-HELPER-PRE/main/bilibili_helper.sh)
+get_sh_bili() {
+    bili_list=(https://ghproxy.com/https://raw.githubusercontent.com/Tiziyi/bilibili/main/bili_update.sh https://raw.githubusercontent.com/Tiziyi/bilibili/main/bili_update.sh https://raw.sevencdn.com/Tiziyi/bilibili/main/bili_update.sh)
     for url in ${bili_list[@]}; do
         check_url $url
         if [ $? = 0 ]; then
@@ -143,29 +143,31 @@ dl_bili_shell() {
 }
 
 if [ "${bili_update.sh}" = 'y' -o "${all}" = 1 ]; then
-    get_sh_bilibili && dl_bili_shell
+    get_sh_bili && dl_bili_shell
 else
 
-# 将 自动更新 添加到定时任务
-echo "尝试添加定时任务"
-add_bili_update() {
-    if [ "$(grep -c "bili_date" /ql/config/crontab.list)" != 0 ]; then
-        echo "您的任务列表中已存在 bili_date"
+
+
+echo "尝试添加自动更新定时任务"
+add_bili_ipdate() {
+    if [ "$(grep -c "bili_update" /ql/config/crontab.list)" != 0 ]; then
+        echo "您的任务列表中已存在 bili_update"
     else
-        echo "开始添加 bili_date定时任务"
+        echo "开始添加 bili_update定时任务"
         # 获取token
         token=$(cat /ql/config/auth.json | jq --raw-output .token)
         curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"更新海尔破","command":"task bili_update.sh","schedule":"15 4 * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1624782068473'
     fi
 }
-# 运行一次 bili_date
+# 运行一次 自动更新
 run_bili_update() {
     task bili_update.sh
     sleep 5
 }
 
+
 if [ "${suqing}" = 'y' -o "${all}" = 1 ]; then
-    dl_bili_shell && run_bili_update
+    add_bili_ipdate && run_bili_update
     echo "已为您添加定时任务"
 else
     echo "已为您跳过添加定时任务"
