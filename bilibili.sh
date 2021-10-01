@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+##引用部分graytoowolf代码 更新文件来自graytoowolf
+##代码虽然狗屎但是我测试还是能用的
+##仓库地址https://github.com/JunzhouLiu/BILIBILI-HELPER-PRE
 
 dir_config=/ql/config
 dir_scripts=/ql/scripts
