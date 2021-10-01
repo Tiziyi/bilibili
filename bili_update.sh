@@ -23,16 +23,16 @@ echo "最新版本:"$latest_VERSION
 download_url=`echo $latest | jq '.assets[0].browser_download_url' | sed 's/"//g'`
 download(){
    curl -L -o "./BILIBILI-HELPER.zip" "https://ghproxy.com/$download_url"
-   mkdir ./tmp
+   mkdir ./blbl
    echo "正在解压文件......."
-   unzip -o -d ./tmp/ BILIBILI-HELPER.zip
-   cp -f ./tmp/BILIBILI-HELPER*.jar BILIBILI-HELPER.jar
-   if [ ! -f "./config.json" ];then
+   unzip -o -d ./blbl/ BILIBILI-HELPER.zip
+   cp -f ./blbl/BILIBILI-HELPER*.jar BILIBILI-HELPER.jar
+   if [ ! -f "/ql/config/bilibili.json" ];then
         echo "配置文件不存在。"
-        cp -f ./tmp/config.json config.json
+        cp -f ./blbl/config.json /ql/config/bilibili.json
     fi
    echo "清除缓存........."
-   rm -rf tmp
+   rm -rf blbl
    rm -rf BILIBILI-HELPER.zip
    echo "更新完成"
 }
