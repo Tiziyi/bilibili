@@ -2,7 +2,7 @@
 
 
 dir_config=/ql/config
-dir_script=/ql/scripts
+dir_scripts=/ql/scripts
 bilibili_shell_path=$dir_config/bilibili.json
 bili_shell_path=$dir_script/bili_update.sh
 
@@ -113,7 +113,6 @@ else
     echo "已为您跳过添加定时任务"
 fi
 
-#############################################
 # 获取有效 更新文件 链接
 get_sh_bili() {
     bili_list=(https://ghproxy.com/https://raw.githubusercontent.com/Tiziyi/bilibili/main/bili_update.sh https://raw.githubusercontent.com/Tiziyi/bilibili/main/bili_update.sh https://raw.sevencdn.com/Tiziyi/bilibili/main/bili_update.sh)
@@ -126,53 +125,45 @@ get_sh_bili() {
         fi
     done
 }
-
-# 下载自动更新配置文件
+# 下载 bili_update.sh
 dl_bili_shell() {
     if [ ! -a "$bili_shell_path" ]; then
         touch $bili_shell_path
     fi
     curl -sL --connect-timeout 3 $valid_url > $bili_shell_path
-    cp $bili_shell_path $dir_script/bili_update.sh
+    cp $bili_shell_path $dir_scripts/bili_update.sh
     # 判断是否下载成功
     bili_size=$(ls -l $bili_shell_path | awk '{print $5}')
     if (( $(echo "${bili_size} < 100" | bc -l) )); then
-        echo "bili_update.sh 下载失败"
+        echo "bili_update 下载失败"
         exit 0
     fi
 }
-
-if [ "${bili_update.sh}" = 'y' -o "${all}" = 1 ]; then
+if [ "${update}" = 'y' -o "${all}" = 1 ]; then
     get_sh_bili && dl_bili_shell
 else
+    echo "已为您跳过替换 task_before.sh"
+fi
 
 
-
-echo "尝试添加自动更新定时任务"
-add_bili_ipdate() {
+# 添加定时任务 自动更新
+add_bili_update() {
     if [ "$(grep -c "bili_update" /ql/config/crontab.list)" != 0 ]; then
         echo "您的任务列表中已存在 bili_update"
     else
-        echo "开始添加 bili_update定时任务"
+        echo "开始添加 bili_update"
         # 获取token
         token=$(cat /ql/config/auth.json | jq --raw-output .token)
-        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"更新海尔破","command":"task bili_update.sh","schedule":"15 4 * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1624782068473'
+        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"更新海尔破","command":"task bili_update.sh","schedule":"13 4 * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1626247933219'
     fi
 }
-# 运行一次 自动更新
-run_bili_update() {
-    task bili_update.sh
-    sleep 5
-}
-
 
 if [ "${suqing}" = 'y' -o "${all}" = 1 ]; then
-    add_bili_ipdate && run_bili_update
-    echo "已为您添加定时任务"
+    add_bili_update
+    echo "已为您添加自动更新定时任务"
 else
-    echo "已为您跳过添加定时任务"
+    echo "已为您跳过添加自动更新定时任务"
 fi
-
 
 # 提示配置结束
 echo -e "\n配置到此结束，请前往/ql/config/bilibili.json填入配置"
