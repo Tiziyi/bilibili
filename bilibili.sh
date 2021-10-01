@@ -108,4 +108,4 @@ run_bilibili_java() {
 
 
 # 提示配置结束
-echo -e "\n配置到此结束，您是否成功了呢？"
+echo -e "\n配置到此结束，请前往/ql/config/bilibili.json填入配置"
