@@ -3,10 +3,8 @@
 
 dir_config=/ql/config
 dir_script=/ql/scripts
-bilibili_shell_path=""
+bilibili_shell_path=$dir_config/bilibili.json
 bili_shell_path=$dir_script/bili.sh
-dir_ml=$dir_config/bilibili.json
-
 
 # 控制是否执行变量
 read -p "是否执行全部操作，输入 1 即可执行全部，输入 0 则跳出，回车默认和其他可进行选择性操作，建议初次配置输入 1：" all
@@ -19,14 +17,6 @@ else
     Rconfig=${Rconfig:-'y'}
     read -p "bili_update.sh 操作（替换或下载选项为 y，不替换为 n，回车为替换）请输入：" update
     update=${update:-'y'}
-    
-fi
-    #配置文件目录
-    echo -n -e "\e[33m一.请输入配置文件保存的绝对路径,直接回车为config目录:\e[0m"
-    read BILIBILI_shell_path
-    bilibili_shell_path=$BILIBILI_shell_path
-    if [ -z "$bilibili_shell_path" ]; then
-    bilibili_shell_path=$dir_ml
 fi
 
 # 检查域名连通性
