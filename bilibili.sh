@@ -64,9 +64,23 @@ else
     echo "已为您跳过替换 bilibili.json"
 fi
 
-
-
-
+##下载jay包
+cd /ql/scripts
+echo"下载jay文件......"
+curl -L -o "./BILIBILI-HELPER.zip" "https://ghproxy.com/$download_url"
+mkdir ./tmp
+echo "正在解压文件......."
+unzip -d ./tmp/ BILIBILI-HELPER.zip
+cp -f ./tmp/BILIBILI-HELPER*.jar BILIBILI-HELPER.jar
+echo "清除缓存........."
+rm -rf tmp
+rm -rf BILIBILI-HELPER.zip
+echo "下载完成"
+##安装依赖
+echo "安装依赖"
+cd /ql && apk add openjdk8
+sleep 5
+echo "安装完成"
 
 
 
