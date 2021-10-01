@@ -89,7 +89,7 @@ echo "依赖安装完成"
 
 # 将 bilibilijay包 添加到定时任务
 echo "尝试添加定时任务"
-add_bilibili_jay()
+add_bilibili_jay() {
 if [ "$(grep -c "BILIBILI-HELPER" /ql/config/crontab.list)" != 0 ]; then
         echo "您的任务列表中已存在 java -jar /ql/scripts/BILIBILI-HELPER.jar"
     else
