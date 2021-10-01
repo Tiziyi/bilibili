@@ -100,7 +100,7 @@ add_bilibili_jay() {
         echo "开始添加 BILIBILI定时任务"
         # 获取token
         token=$(cat /ql/config/auth.json | jq --raw-output .token)
-        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"运行海尔破","command":"java -jar /ql/scripts/BILIBILI-HELPER-2.0.9.jar /ql/config/bilibili.json","schedule":"51 0 * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1624782068473'
+        curl -s -H 'Accept: application/json' -H "Authorization: Bearer $token" -H 'Content-Type: application/json;charset=UTF-8' -H 'Accept-Language: zh-CN,zh;q=0.9' --data-binary '{"name":"运行海尔破","command":"java -jar /ql/scripts/BILIBILI-HELPER.jar /ql/config/bilibili.json","schedule":"51 0 * * *"}' --compressed 'http://127.0.0.1:5700/api/crons?t=1624782068473'
     fi
 }
 # 运行一次 java -jar /ql/scripts/BILIBILI-HELPER.jar
