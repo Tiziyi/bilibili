@@ -36,7 +36,7 @@ check_url() {
 
 # 获取有效 bilibili.json 链接
 get_json_bilibili() {
-    bilibili_list=(https://ghproxy.com/https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json https://raw.sevencdn.com/Tiziyi/bilibili/main/bilibili.jsonhttps://ghproxy.com/https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json)
+    bilibili_list=(https://ghproxy.com/https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json https://raw.githubusercontent.com/Tiziyi/bilibili/main/bilibili.json https://raw.sevencdn.com/Tiziyi/bilibili/main/bilibili.json)
     for url in ${bilibili_list[@]}; do
         check_url $url
         if [ $? = 0 ]; then
